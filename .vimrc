@@ -103,3 +103,10 @@ set expandtab " insert space chars whenever a tab key is pressed
 set tabstop=4 " how many columns a tab counts for
 set softtabstop=4 " use 4 space chars for tab with insert mode (since expandtab is enabled)
 set shiftwidth=4 " Number of spaces to use for each step of (auto)indent
+
+" -----------------------------------------------------------------------------
+" Mapped Key Bindings
+" -----------------------------------------------------------------------------
+set pastetoggle=<F1>
+map <F2> :NERDTreeToggle<CR>
+map <leader>jt <Esc>:%!json_xs -f json -t json-pretty<CR>
