@@ -20,7 +20,8 @@ call vundle#rc()
 " -----------------------------------------------------------------------------
 " Plugins
 " -----------------------------------------------------------------------------
-" Required for vundle Bundle 'gmarik/vundle'
+" Required for vundle
+Bundle 'gmarik/vundle'
 
 " File browser
 Bundle 'scrooloose/nerdtree'
@@ -159,7 +160,8 @@ imap <C-S-Left> <ESC>:tabp<CR>
 " CtrlP
 
 " file finder mapping
-let g:ctrlp_map = '<c-p>'
+let g_ctrlp_cmd = 'CtrlP'
+let g:ctrlp_map = ',e'
 " tags (symbols) in current file finder mapping
 nmap <C-g> :CtrlPBufTag<CR>
 " tags (symbols) in all files finder mapping
@@ -258,7 +260,7 @@ highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
 
 " Airline
 let g:airline_powerline_fonts = 0
-let g:airline_theme = 'bubblegum'
+let g:airline_theme = 'badwolf'
 let g:airline#extensions#whitespace#enabled = 0
 
 " -----------------------------------------------------------------------------
