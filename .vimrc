@@ -16,10 +16,12 @@ filetype off
 set rtp+=~/.vim/bundle/Vundle/
 call vundle#rc()
 
+
 " -----------------------------------------------------------------------------
 " Plugins
 " -----------------------------------------------------------------------------
-"
+
+" Required for vundle
 Bundle 'gmarik/vundle'
 
 " File browser
@@ -56,8 +58,7 @@ Bundle 'klen/python-mode'
 " Better autocompletion
 Bundle 'Shougo/neocomplcache.vim'
 
-Bundle 'tomtom/tlib_vim'
-
+" Useful python snippets 
 Bundle 'honza/vim-snippets'
 
 " Git/mercurial/others diff icons on the side of the file lines
@@ -138,20 +139,28 @@ end
 " Plugins Configurations
 " -----------------------------------------------------------------------------
 
+" NerdTree
+map <F2> :NERDTreeToggle<CR>
+
+
 " -----------------------------------------------------------------------------
 " GUI / Look & Feel
 " -----------------------------------------------------------------------------
+
 " Hide buttons in gVim
 if has("gui_running")
   if has("gui_gtk2")
     set guioptions-=T
   endif
 endif
+
+
 " -----------------------------------------------------------------------------
 " Editing
 " -----------------------------------------------------------------------------
 
 syntax on
+
 " Allow plugins by file type
 filetype plugin on
 filetype indent on
@@ -161,17 +170,29 @@ set number
 set backspace=indent,eol,start
 
 set pastetoggle=<F1>
+
+
 " -----------------------------------------------------------------------------
 " Indentation
 " -----------------------------------------------------------------------------
+
 set expandtab " insert space chars whenever a tab key is pressed
 set tabstop=4 " how many columns a tab counts for
 set softtabstop=4 " use 4 space chars for tab with insert mode (since expandtab is enabled)
 set shiftwidth=4 " Number of spaces to use for each step of (auto)indent
 
-" tab length exceptions on some file types
+" Tab length exceptions on some file types
 autocmd FileType html setlocal shiftwidth=2 tabstop=2 softtabstop=2
 autocmd FileType htmldjango setlocal shiftwidth=2 tabstop=2 softtabstop=2
 autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=2
 
-set ls=2 " for showing status bar always
+" for showing status bar always
+set ls=2
+
+
+" -----------------------------------------------------------------------------
+" Mapped Key Bindings
+" -----------------------------------------------------------------------------
+
+set pastetoggle=<F1>
+map <leader>jt <Esc>:%!json_xs -f json -t json-pretty<CR>
