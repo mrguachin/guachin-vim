@@ -20,9 +20,7 @@ call vundle#rc()
 " -----------------------------------------------------------------------------
 " Plugins
 " -----------------------------------------------------------------------------
-
-" Required for vundle
-Bundle 'gmarik/vundle'
+" Required for vundle Bundle 'gmarik/vundle'
 
 " File browser
 Bundle 'scrooloose/nerdtree'
@@ -104,7 +102,7 @@ end
 if has("gui_running")
   colors desert
   if has("gui_gtk2")
-    set guifont=Monospace\ 9
+    set guifont=Monospace\ 10
   elseif has("gui_win32")
     set guifont=Consolas:h10:cANSI
   elseif has("gui_macvim")
@@ -136,12 +134,132 @@ end
 
 
 " -----------------------------------------------------------------------------
-" Plugins Configurations
+" Plugins Configuration
 " -----------------------------------------------------------------------------
 
 " NerdTree
 map <F2> :NERDTreeToggle<CR>
 
+" Tagbar
+
+" shortcuts
+map <F3> :TagbarToggle<CR>
+let g:tagbar_autofocus = 1
+
+" tab navigation mappings
+map tn :tabn<CR> map tp :tabp<CR>
+map tm :tabm 
+map tt :tabnew 
+map ts :tab split<CR>
+map <C-S-Right> :tabn<CR>
+imap <C-S-Right> <ESC>:tabn<CR>
+map <C-S-Left> :tabp<CR>
+imap <C-S-Left> <ESC>:tabp<CR>
+
+" CtrlP
+
+" file finder mapping
+let g:ctrlp_map = '<c-p>'
+" tags (symbols) in current file finder mapping
+nmap <C-g> :CtrlPBufTag<CR>
+" tags (symbols) in all files finder mapping
+nmap <C-n> :CtrlPBufTagAll<CR>
+
+" don't change working directory
+let g:ctrlp_working_path_mode = 0
+" ignore these files and folders on file finder
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/](\.git|\.hg|\.svn)$',
+  \ 'file': '\.pyc$\|\.pyo$',
+  \ }
+
+" Syntastic
+
+" show list of errors and warnings on the current file
+nmap <leader>e :Errors<CR>
+" check also when just opened the file
+let g:syntastic_check_on_open = 1
+" don't put icons on the sign column (it hides the vcs status icons of signify)
+let g:syntastic_enable_signs = 0
+" custom icons (enable them if you use a patched font, and enable the previous 
+" setting)
+let g:syntastic_error_symbol = '✗'
+let g:syntastic_warning_symbol = '⚠'
+let g:syntastic_style_error_symbol = '✗'
+let g:syntastic_style_warning_symbol = '⚠'
+
+" Python-mode
+
+" don't use linter, we use syntastic for that
+let g:pymode_lint_on_write = 0
+let g:pymode_lint_signs = 0
+" don't fold python code on open
+let g:pymode_folding = 0
+" don't load rope by default. Change to 1 to use rope
+let g:pymode_rope = 0
+" open definitions on same window, and custom mappings for definitions and
+" occurrences
+let g:pymode_rope_goto_definition_bind = '<C-b>'
+let g:pymode_rope_goto_definition_cmd = 'new'
+nmap <C-S-b> :tab split<CR>:PymodePython rope.goto()<CR>
+nmap <C-u> :RopeFindOccurrences<CR>
+
+" NeoComplCache
+
+" most of them not documented because I'm not sure how they work
+" (docs aren't good, had to do a lot of trial and error to make 
+" it play nice)
+let g:neocomplcache_enable_at_startup = 1
+let g:neocomplcache_enable_ignore_case = 1
+let g:neocomplcache_enable_smart_case = 1
+let g:neocomplcache_enable_auto_select = 1
+let g:neocomplcache_enable_fuzzy_completion = 1
+let g:neocomplcache_enable_camel_case_completion = 1
+let g:neocomplcache_enable_underbar_completion = 1
+let g:neocomplcache_fuzzy_completion_start_length = 1
+let g:neocomplcache_auto_completion_start_length = 1
+let g:neocomplcache_manual_completion_start_length = 1
+let g:neocomplcache_min_keyword_length = 1
+let g:neocomplcache_min_syntax_length = 1
+
+" complete with workds from any opened file
+let g:neocomplcache_same_filetype_lists = {}
+let g:neocomplcache_same_filetype_lists._ = '_'
+
+" TabMan
+
+" mappings to toggle display, and to focus on it
+let g:tabman_toggle = 'tl'
+let g:tabman_focus  = 'tf'
+
+" Autoclose
+
+" Fix to let ESC work as espected with Autoclose plugin
+let g:AutoClosePumvisible = {"ENTER": "\<C-Y>", "ESC": "\<ESC>"}
+
+" Signify
+
+" this first setting decides in which order try to guess your current vcs
+" UPDATE it to reflect your preferences, it will speed up opening files
+let g:signify_vcs_list = [ 'git', 'hg' ]
+
+" mappings to jump to changed blocks
+nmap <leader>sn <plug>(signify-next-hunk)
+nmap <leader>sp <plug>(signify-prev-hunk)
+
+" colors
+highlight DiffAdd           cterm=bold ctermbg=none ctermfg=119
+highlight DiffDelete        cterm=bold ctermbg=none ctermfg=167
+highlight DiffChange        cterm=bold ctermbg=none ctermfg=227
+highlight SignifySignAdd    cterm=bold ctermbg=237  ctermfg=119
+highlight SignifySignDelete cterm=bold ctermbg=237  ctermfg=167
+highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
+
+
+" Airline
+let g:airline_powerline_fonts = 0
+let g:airline_theme = 'bubblegum'
+let g:airline#extensions#whitespace#enabled = 0
 
 " -----------------------------------------------------------------------------
 " GUI / Look & Feel
@@ -171,6 +289,7 @@ set backspace=indent,eol,start
 
 set pastetoggle=<F1>
 
+set colorcolumn=79
 
 " -----------------------------------------------------------------------------
 " Indentation
@@ -195,4 +314,5 @@ set ls=2
 " -----------------------------------------------------------------------------
 
 set pastetoggle=<F1>
+call togglebg#map("<F5>")
 map <leader>jt <Esc>:%!json_xs -f json -t json-pretty<CR>
