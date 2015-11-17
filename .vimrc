@@ -22,16 +22,71 @@ call vundle#rc()
 "
 Bundle 'gmarik/vundle'
 
+" File browser
+Bundle 'scrooloose/nerdtree'
+
+" Code commenter
+Bundle 'scrooloose/nerdcommenter'
+
+" Python and other languages code checker
+Bundle 'scrooloose/syntastic'
+
+" Class/module browser
+Bundle 'majutsushi/tagbar'
+
+" Code and files fuzzy finder
+Bundle 'kien/ctrlp.vim'
+
+" Tab list panel
+Bundle 'kien/tabman.vim'
+
+" Airline
+Bundle 'bling/vim-airline'
+
+" Autoclose
+Bundle 'Townk/vim-autoclose'
+
+" Indent text object
+Bundle 'michaeljsmith/vim-indent-object'
+
+" Python mode (indentation, doc, refactor, lints, code checking, motion and
+" operators, highlighting, run and ipdb breakpoints)
+Bundle 'klen/python-mode'
+
+" Better autocompletion
+Bundle 'Shougo/neocomplcache.vim'
+
+Bundle 'tomtom/tlib_vim'
+
+Bundle 'honza/vim-snippets'
+
+" Git/mercurial/others diff icons on the side of the file lines
+Bundle 'mhinz/vim-signify'
+
+" Window chooser
+Bundle 't9md/vim-choosewin'
+
+" Paint css colors with the real color
+Bundle 'lilydjwg/colorizer'
+
+" Search results counter
+Bundle 'IndexedSearch'
+
+" XML/HTML tags navigation
+Bundle 'matchit.zip'
+
+" Yank history navigation
+Bundle 'YankRing.vim'
+
+" Collection of colours
+Bundle 'flazz/vim-colorschemes'
+
 " Installing plugins the first time
 if iCanHazVundle == 0
     echo "Installing Bundles, please ignore key map error messages"
     echo ""
     :BundleInstall
 endif
-
-syntax on
-filetype plugin on
-filetype indent on
 
 " -----------------------------------------------------------------------------
 "  Detect OS to make things nicer
@@ -86,14 +141,24 @@ end
 " -----------------------------------------------------------------------------
 " GUI / Look & Feel
 " -----------------------------------------------------------------------------
-
+" Hide buttons in gVim
+if has("gui_running")
+  if has("gui_gtk2")
+    set guioptions-=T
+  endif
+endif
 " -----------------------------------------------------------------------------
 " Editing
 " -----------------------------------------------------------------------------
 
+syntax on
+" Allow plugins by file type
+filetype plugin on
+filetype indent on
+set number
+
 " Make "<BS>" and "<Del>" behavior less surprising. (fix backspace problem )
 set backspace=indent,eol,start
-
 
 set pastetoggle=<F1>
 " -----------------------------------------------------------------------------
@@ -103,3 +168,10 @@ set expandtab " insert space chars whenever a tab key is pressed
 set tabstop=4 " how many columns a tab counts for
 set softtabstop=4 " use 4 space chars for tab with insert mode (since expandtab is enabled)
 set shiftwidth=4 " Number of spaces to use for each step of (auto)indent
+
+" tab length exceptions on some file types
+autocmd FileType html setlocal shiftwidth=2 tabstop=2 softtabstop=2
+autocmd FileType htmldjango setlocal shiftwidth=2 tabstop=2 softtabstop=2
+autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=2
+
+set ls=2 " for showing status bar always
