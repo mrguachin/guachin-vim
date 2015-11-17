@@ -314,5 +314,5 @@ set ls=2
 " -----------------------------------------------------------------------------
 
 set pastetoggle=<F1>
-call togglebg#map("<F5>")
+map <F5> :let &background = ( &background == "dark" ? "light" : "dark" )<CR>
 map <leader>jt <Esc>:%!json_xs -f json -t json-pretty<CR>
