@@ -347,6 +347,8 @@ nmap <leader>e :Errors<CR>
 nmap <C-S-b> :tab split<CR>:PymodePython rope.goto()<CR>
 nmap <C-u> :RopeFindOccurrences<CR>
 
+" Write file with sudo
+cmap w!! %!sudo tee > /dev/null %
 
 
 " -----------------------------------------------------------------------------
