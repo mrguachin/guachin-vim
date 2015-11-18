@@ -23,6 +23,9 @@ call vundle#rc()
 " Required for vundle
 Bundle 'gmarik/vundle'
 
+" Elegant buffer explorer - takes very little screen space
+Bundle 'fholgado/minibufexpl.vim'
+
 " File browser
 Bundle 'scrooloose/nerdtree'
 
@@ -57,7 +60,7 @@ Bundle 'klen/python-mode'
 " Better autocompletion
 Bundle 'Shougo/neocomplcache.vim'
 
-" Useful python snippets 
+" Useful python snippets
 Bundle 'honza/vim-snippets'
 
 " Git/mercurial/others diff icons on the side of the file lines
@@ -76,7 +79,7 @@ Bundle 'IndexedSearch'
 Bundle 'matchit.zip'
 
 " Yank history navigation
-Bundle 'YankRing.vim'
+" Bundle 'YankRing.vim'
 
 " Collection of colours
 Bundle 'flazz/vim-colorschemes'
@@ -137,35 +140,35 @@ end
 " -----------------------------------------------------------------------------
 " Plugins Configuration
 " -----------------------------------------------------------------------------
+let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
 
-" NerdTree
-map <F2> :NERDTreeToggle<CR>
+" check also when just opened the file
+let g:syntastic_check_on_open=1
+let g:syntastic_enable_signs=1
+let g:syntastic_auto_loc_list=1
+" Better :sign interface symbols
+let g:syntastic_auto_jump=0
+" " don't put icons on the sign column (it hides the vcs status icons of
+" signify)
+let g:syntastic_enable_signs = 0
+let syntastic_python_flake8_args='--ignore=E501,E225,W293,E126,E127,E128'
+let g:syntastic_python_checker_args='--ignore=E501,E225,W293,E126,E127,E128'
+
 
 " Tagbar
 
 " shortcuts
-map <F3> :TagbarToggle<CR>
 let g:tagbar_autofocus = 1
-
-" tab navigation mappings
-map tn :tabn<CR> map tp :tabp<CR>
-map tm :tabm 
-map tt :tabnew 
-map ts :tab split<CR>
-map <C-S-Right> :tabn<CR>
-imap <C-S-Right> <ESC>:tabn<CR>
-map <C-S-Left> :tabp<CR>
-imap <C-S-Left> <ESC>:tabp<CR>
 
 " CtrlP
 
 " file finder mapping
-let g_ctrlp_cmd = 'CtrlP'
-let g:ctrlp_map = ',e'
-" tags (symbols) in current file finder mapping
-nmap <C-g> :CtrlPBufTag<CR>
-" tags (symbols) in all files finder mapping
-nmap <C-n> :CtrlPBufTagAll<CR>
+let g:ctrlp_map = '<C-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+  \ 'file': '\v\.(exe|so|dll)$',
+  \ }
 
 " don't change working directory
 let g:ctrlp_working_path_mode = 0
@@ -175,15 +178,11 @@ let g:ctrlp_custom_ignore = {
   \ 'file': '\.pyc$\|\.pyo$',
   \ }
 
-" Syntastic
-
-" show list of errors and warnings on the current file
-nmap <leader>e :Errors<CR>
 " check also when just opened the file
 let g:syntastic_check_on_open = 1
 " don't put icons on the sign column (it hides the vcs status icons of signify)
 let g:syntastic_enable_signs = 0
-" custom icons (enable them if you use a patched font, and enable the previous 
+" custom icons (enable them if you use a patched font, and enable the previous
 " setting)
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '⚠'
@@ -203,13 +202,12 @@ let g:pymode_rope = 0
 " occurrences
 let g:pymode_rope_goto_definition_bind = '<C-b>'
 let g:pymode_rope_goto_definition_cmd = 'new'
-nmap <C-S-b> :tab split<CR>:PymodePython rope.goto()<CR>
-nmap <C-u> :RopeFindOccurrences<CR>
+
 
 " NeoComplCache
 
 " most of them not documented because I'm not sure how they work
-" (docs aren't good, had to do a lot of trial and error to make 
+" (docs aren't good, had to do a lot of trial and error to make
 " it play nice)
 let g:neocomplcache_enable_at_startup = 1
 let g:neocomplcache_enable_ignore_case = 1
@@ -245,10 +243,6 @@ let g:AutoClosePumvisible = {"ENTER": "\<C-Y>", "ESC": "\<ESC>"}
 " UPDATE it to reflect your preferences, it will speed up opening files
 let g:signify_vcs_list = [ 'git', 'hg' ]
 
-" mappings to jump to changed blocks
-nmap <leader>sn <plug>(signify-next-hunk)
-nmap <leader>sp <plug>(signify-prev-hunk)
-
 " colors
 highlight DiffAdd           cterm=bold ctermbg=none ctermfg=119
 highlight DiffDelete        cterm=bold ctermbg=none ctermfg=167
@@ -259,13 +253,24 @@ highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
 
 
 " Airline
-let g:airline_powerline_fonts = 0
+"
+let g:airline_powerline_fonts = 1
 let g:airline_theme = 'badwolf'
 let g:airline#extensions#whitespace#enabled = 0
+let g:airline#extensions#syntastic#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
 
 " -----------------------------------------------------------------------------
 " GUI / Look & Feel
 " -----------------------------------------------------------------------------
+
+" Indicate matching brackets when cursor is over them.
+set showmatch
+
+" Ignore non-text or back-up files.
+set wildignore=*.o,*.obj,*.a,*.lib,*.so,*.dll,*.exe,*.pyc,*.class,*.swp,*~
+
+set lazyredraw          " redraw only when we need to.
 
 " Hide buttons in gVim
 if has("gui_running")
@@ -273,7 +278,6 @@ if has("gui_running")
     set guioptions-=T
   endif
 endif
-
 
 " -----------------------------------------------------------------------------
 " Editing
@@ -288,6 +292,7 @@ set number
 
 " Make "<BS>" and "<Del>" behavior less surprising. (fix backspace problem )
 set backspace=indent,eol,start
+set encoding=utf-8
 
 set pastetoggle=<F1>
 
@@ -316,5 +321,84 @@ set ls=2
 " -----------------------------------------------------------------------------
 
 set pastetoggle=<F1>
+map <F2> :NERDTreeToggle<CR>
+map <F3> :TagbarToggle<CR>
 map <F5> :let &background = ( &background == "dark" ? "light" : "dark" )<CR>
 map <leader>jt <Esc>:%!json_xs -f json -t json-pretty<CR>
+
+" mappings to jump to changed blocks
+nmap <leader>sn <plug>(signify-next-hunk)
+nmap <leader>sp <plug>(signify-prev-hunk)
+
+" tab navigation mappings
+map tn :tabn<CR> map tp :tabp<CR>
+map tm :tabm
+map tt :tabnew
+map ts :tab split<CR>
+map <C-S-Right> :tabn<CR>
+imap <C-S-Right> <ESC>:tabn<CR>
+map <C-S-Left> :tabp<CR>
+imap <C-S-Left> <ESC>:tabp<CR>
+
+" tags (symbols) in current file finder mapping
+nmap <C-g> :CtrlPBufTag<CR>
+" tags (symbols) in all files finder mapping
+nmap <C-n> :CtrlPBufTagAll<CR>
+
+" show list of errors and warnings on the current file
+nmap <leader>e :Errors<CR>
+
+nmap <C-S-b> :tab split<CR>:PymodePython rope.goto()<CR>
+nmap <C-u> :RopeFindOccurrences<CR>
+
+" Write file with sudo
+cmap w!! %!sudo tee > /dev/null %
+
+
+" -----------------------------------------------------------------------------
+" Hooks
+" -----------------------------------------------------------------------------
+
+" automatically reload vimrc when it's saved
+au BufWritePost .vimrc so ~/.vimrc
+
+autocmd BufWritePre * :call Trim()
+
+
+" -----------------------------------------------------------------------------
+" Custom Functions
+" -----------------------------------------------------------------------------
+" Re-indent the whole buffer.
+" Restore cursor position, window position, and last search after running a
+" command.
+function! Preserve(command)
+  " Save the last search.
+  let search = @/
+
+  " Save the current cursor position.
+  let cursor_position = getpos('.')
+
+  " Save the current window position.
+  normal! H
+  let window_position = getpos('.')
+  call setpos('.', cursor_position)
+
+  " Execute the command.
+  execute a:command
+
+  " Restore the last search.
+  let @/ = search
+
+  " Restore the previous window position.
+  call setpos('.', window_position)
+  normal! zt
+
+  " Restore the previous cursor position.
+  call setpos('.', cursor_position)
+endfunction
+
+
+" Remove trailing whitespace in the whole buffer.
+function! Trim()
+      call Preserve('%s/\s\+$//e')
+endfunction
