@@ -21,6 +21,11 @@ call vundle#rc()
 " -----------------------------------------------------------------------------
 "
 Bundle 'gmarik/vundle'
+Bundle 'bling/vim-airline'
+Bundle 'scrooloose/nerdtree'
+Bundle 'fholgado/minibufexpl.vim'
+Bundle 'scrooloose/syntastic'
+
 
 " Installing plugins the first time
 if iCanHazVundle == 0
@@ -82,10 +87,36 @@ end
 " -----------------------------------------------------------------------------
 " Plugins Configurations
 " -----------------------------------------------------------------------------
+let g:airline#extensions#syntastic#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
+let g:airline_theme='light'
+
+let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
+
+" check also when just opened the file
+let g:syntastic_check_on_open=1
+let g:syntastic_enable_signs=1
+let g:syntastic_auto_loc_list=1
+" Better :sign interface symbols
+let g:syntastic_auto_jump=0
+" " don't put icons on the sign column (it hides the vcs status icons of
+" signify)
+let g:syntastic_enable_signs = 0
+let syntastic_python_flake8_args='--ignore=E501,E225,W293,E126,E127,E128'
+let g:syntastic_python_checker_args='--ignore=E501,E225,W293,E126,E127,E128'
 
 " -----------------------------------------------------------------------------
 " GUI / Look & Feel
 " -----------------------------------------------------------------------------
+
+" Indicate matching brackets when cursor is over them.
+set showmatch
+
+" Ignore non-text or back-up files.
+set wildignore=*.o,*.obj,*.a,*.lib,*.so,*.dll,*.exe,*.pyc,*.class,*.swp,*~
+
+set lazyredraw          " redraw only when we need to.
 
 " -----------------------------------------------------------------------------
 " Editing
@@ -93,6 +124,7 @@ end
 
 " Make "<BS>" and "<Del>" behavior less surprising. (fix backspace problem )
 set backspace=indent,eol,start
+set encoding=utf-8
 
 
 set pastetoggle=<F1>
@@ -110,3 +142,24 @@ set shiftwidth=4 " Number of spaces to use for each step of (auto)indent
 set pastetoggle=<F1>
 map <F2> :NERDTreeToggle<CR>
 map <leader>jt <Esc>:%!json_xs -f json -t json-pretty<CR>
+
+" -----------------------------------------------------------------------------
+" Hooks
+" -----------------------------------------------------------------------------
+
+" automatically reload vimrc when it's saved
+au BufWritePost .vimrc so ~/.vimrc
+
+autocmd BufWritePre * :call Trim()
+
+
+" -----------------------------------------------------------------------------
+" Custom Functions
+" -----------------------------------------------------------------------------
+
+" Remove trailing whitespace in the whole buffer.
+function! Trim()
+      call Preserve('%s/\s\+$//e')
+endfunction
+
+
