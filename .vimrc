@@ -79,7 +79,7 @@ Bundle 'IndexedSearch'
 Bundle 'matchit.zip'
 
 " Yank history navigation
-Bundle 'YankRing.vim'
+" Bundle 'YankRing.vim'
 
 " Collection of colours
 Bundle 'flazz/vim-colorschemes'
@@ -163,8 +163,12 @@ let g:tagbar_autofocus = 1
 " CtrlP
 
 " file finder mapping
-let g:ctrlp_map = '<c-p>'
+let g:ctrlp_map = '<C-p>'
 let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+  \ 'file': '\v\.(exe|so|dll)$',
+  \ }
 
 " don't change working directory
 let g:ctrlp_working_path_mode = 0
