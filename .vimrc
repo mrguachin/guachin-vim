@@ -26,9 +26,6 @@ Bundle 'gmarik/vundle'
 " Elegant buffer explorer - takes very little screen space
 Bundle 'fholgado/minibufexpl.vim'
 
-" Syntax checking hacks for vim
-Bundle 'scrooloose/syntastic'
-
 " File browser
 Bundle 'scrooloose/nerdtree'
 
@@ -143,11 +140,6 @@ end
 " -----------------------------------------------------------------------------
 " Plugins Configuration
 " -----------------------------------------------------------------------------
-let g:airline#extensions#syntastic#enabled = 1
-let g:airline#extensions#tabline#enabled = 1
-let g:airline_powerline_fonts = 1
-let g:airline_theme='light'
-
 let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
 
 " check also when just opened the file
@@ -162,34 +154,17 @@ let g:syntastic_enable_signs = 0
 let syntastic_python_flake8_args='--ignore=E501,E225,W293,E126,E127,E128'
 let g:syntastic_python_checker_args='--ignore=E501,E225,W293,E126,E127,E128'
 
-" NerdTree
-map <F2> :NERDTreeToggle<CR>
 
 " Tagbar
 
 " shortcuts
-map <F3> :TagbarToggle<CR>
 let g:tagbar_autofocus = 1
-
-" tab navigation mappings
-map tn :tabn<CR> map tp :tabp<CR>
-map tm :tabm
-map tt :tabnew
-map ts :tab split<CR>
-map <C-S-Right> :tabn<CR>
-imap <C-S-Right> <ESC>:tabn<CR>
-map <C-S-Left> :tabp<CR>
-imap <C-S-Left> <ESC>:tabp<CR>
 
 " CtrlP
 
 " file finder mapping
-let g_ctrlp_cmd = 'CtrlP'
-let g:ctrlp_map = ',e'
-" tags (symbols) in current file finder mapping
-nmap <C-g> :CtrlPBufTag<CR>
-" tags (symbols) in all files finder mapping
-nmap <C-n> :CtrlPBufTagAll<CR>
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
 
 " don't change working directory
 let g:ctrlp_working_path_mode = 0
@@ -199,10 +174,6 @@ let g:ctrlp_custom_ignore = {
   \ 'file': '\.pyc$\|\.pyo$',
   \ }
 
-" Syntastic
-
-" show list of errors and warnings on the current file
-nmap <leader>e :Errors<CR>
 " check also when just opened the file
 let g:syntastic_check_on_open = 1
 " don't put icons on the sign column (it hides the vcs status icons of signify)
@@ -227,8 +198,7 @@ let g:pymode_rope = 0
 " occurrences
 let g:pymode_rope_goto_definition_bind = '<C-b>'
 let g:pymode_rope_goto_definition_cmd = 'new'
-nmap <C-S-b> :tab split<CR>:PymodePython rope.goto()<CR>
-nmap <C-u> :RopeFindOccurrences<CR>
+
 
 " NeoComplCache
 
@@ -269,10 +239,6 @@ let g:AutoClosePumvisible = {"ENTER": "\<C-Y>", "ESC": "\<ESC>"}
 " UPDATE it to reflect your preferences, it will speed up opening files
 let g:signify_vcs_list = [ 'git', 'hg' ]
 
-" mappings to jump to changed blocks
-nmap <leader>sn <plug>(signify-next-hunk)
-nmap <leader>sp <plug>(signify-prev-hunk)
-
 " colors
 highlight DiffAdd           cterm=bold ctermbg=none ctermfg=119
 highlight DiffDelete        cterm=bold ctermbg=none ctermfg=167
@@ -283,9 +249,12 @@ highlight SignifySignChange cterm=bold ctermbg=237  ctermfg=227
 
 
 " Airline
-let g:airline_powerline_fonts = 0
+"
+let g:airline_powerline_fonts = 1
 let g:airline_theme = 'badwolf'
 let g:airline#extensions#whitespace#enabled = 0
+let g:airline#extensions#syntastic#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
 
 " -----------------------------------------------------------------------------
 " GUI / Look & Feel
@@ -348,8 +317,37 @@ set ls=2
 " -----------------------------------------------------------------------------
 
 set pastetoggle=<F1>
+map <F2> :NERDTreeToggle<CR>
+map <F3> :TagbarToggle<CR>
 map <F5> :let &background = ( &background == "dark" ? "light" : "dark" )<CR>
 map <leader>jt <Esc>:%!json_xs -f json -t json-pretty<CR>
+
+" mappings to jump to changed blocks
+nmap <leader>sn <plug>(signify-next-hunk)
+nmap <leader>sp <plug>(signify-prev-hunk)
+
+" tab navigation mappings
+map tn :tabn<CR> map tp :tabp<CR>
+map tm :tabm
+map tt :tabnew
+map ts :tab split<CR>
+map <C-S-Right> :tabn<CR>
+imap <C-S-Right> <ESC>:tabn<CR>
+map <C-S-Left> :tabp<CR>
+imap <C-S-Left> <ESC>:tabp<CR>
+
+" tags (symbols) in current file finder mapping
+nmap <C-g> :CtrlPBufTag<CR>
+" tags (symbols) in all files finder mapping
+nmap <C-n> :CtrlPBufTagAll<CR>
+
+" show list of errors and warnings on the current file
+nmap <leader>e :Errors<CR>
+
+nmap <C-S-b> :tab split<CR>:PymodePython rope.goto()<CR>
+nmap <C-u> :RopeFindOccurrences<CR>
+
+
 
 " -----------------------------------------------------------------------------
 " Hooks
@@ -364,6 +362,35 @@ autocmd BufWritePre * :call Trim()
 " -----------------------------------------------------------------------------
 " Custom Functions
 " -----------------------------------------------------------------------------
+" Re-indent the whole buffer.
+" Restore cursor position, window position, and last search after running a
+" command.
+function! Preserve(command)
+  " Save the last search.
+  let search = @/
+
+  " Save the current cursor position.
+  let cursor_position = getpos('.')
+
+  " Save the current window position.
+  normal! H
+  let window_position = getpos('.')
+  call setpos('.', cursor_position)
+
+  " Execute the command.
+  execute a:command
+
+  " Restore the last search.
+  let @/ = search
+
+  " Restore the previous window position.
+  call setpos('.', window_position)
+  normal! zt
+
+  " Restore the previous cursor position.
+  call setpos('.', cursor_position)
+endfunction
+
 
 " Remove trailing whitespace in the whole buffer.
 function! Trim()
